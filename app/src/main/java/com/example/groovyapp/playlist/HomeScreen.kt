@@ -22,6 +22,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.groovyapp.playlist.PlaylistModel
+import com.example.groovyapp.playlist.PlaylistRepository
+import com.example.groovyapp.playlist.PlaylistViewModel
+import com.example.groovyapp.playlist.PlaylistViewModelFactory
 
 @Composable
 fun HomeScreen() {

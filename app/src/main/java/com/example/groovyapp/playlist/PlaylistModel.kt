@@ -1,4 +1,4 @@
-package com.example.groovyapp
+package com.example.groovyapp.playlist
 
 data class PlaylistModel(
     val id: Int,

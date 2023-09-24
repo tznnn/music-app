@@ -1,4 +1,4 @@
-package com.example.groovyapp
+package com.example.groovyapp.playlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
