@@ -19,6 +19,7 @@ class PlaylistViewModelShould : BaseUnitTest() {
 
     @Test
     fun getPlaylistsFromRepository() = runTest {
+        mockSuccessfulCase()
         verify(repository, times(1)).getPlaylist()
     }
 
@@ -42,7 +43,7 @@ class PlaylistViewModelShould : BaseUnitTest() {
         assertEquals(exception, viewModel.playlists.value?.exceptionOrNull())
     }
 
-    private fun mockSuccessfulCase(): PlaylistViewModel {
+    private suspend fun mockSuccessfulCase(): PlaylistViewModel {
         runTest {
             `when`(repository.getPlaylist()).thenReturn(
                 flow {

@@ -22,15 +22,18 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.groovyapp.playlist.PlaylistApi
 import com.example.groovyapp.playlist.PlaylistModel
 import com.example.groovyapp.playlist.PlaylistRepository
+import com.example.groovyapp.playlist.PlaylistService
 import com.example.groovyapp.playlist.PlaylistViewModel
 import com.example.groovyapp.playlist.PlaylistViewModelFactory
 
 @Composable
 fun HomeScreen() {
 
-    val repository = PlaylistRepository()
+    val service = PlaylistService(object : PlaylistApi {})
+    val repository = PlaylistRepository(service)
     val viewModel: PlaylistViewModel = viewModel(factory = PlaylistViewModelFactory(repository))
 
     val myData = viewModel.playlists.collectAsState().value
