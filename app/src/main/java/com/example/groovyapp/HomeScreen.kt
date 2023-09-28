@@ -28,21 +28,25 @@ import com.example.groovyapp.playlist.PlaylistRepository
 import com.example.groovyapp.playlist.PlaylistService
 import com.example.groovyapp.playlist.PlaylistViewModel
 import com.example.groovyapp.playlist.PlaylistViewModelFactory
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun HomeScreen() {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("http://192.168.1.105:2999/")
+        .client(OkHttpClient())
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    val service = PlaylistService(object : PlaylistApi {})
+    val api = retrofit.create(PlaylistApi::class.java)
+    val service = PlaylistService(api)
     val repository = PlaylistRepository(service)
     val viewModel: PlaylistViewModel = viewModel(factory = PlaylistViewModelFactory(repository))
 
-    val myData = viewModel.playlists.collectAsState().value
 
-    val playlist =
-        listOf(
-            PlaylistModel(1, "sfs", "sdfsdf", 3),
-            PlaylistModel(2, "aa", "ddd", 3)
-        )
+    val playlist = viewModel.playlists.collectAsState().value
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(title = { Text("Playlists") }, backgroundColor = MaterialTheme.colors.primary)
     }, content = {
@@ -54,12 +58,12 @@ fun HomeScreen() {
             LazyColumn(
                 modifier = Modifier.testTag("playlistLazyColumn"),
                 content = {
-                    items(playlist) { item ->
+                    items(playlist?.getOrNull() ?: emptyList()) { item ->
                         ListItem(
                             id = item.id,
                             name = item.name,
                             category = item.category,
-                            image = item.image
+                            image = R.drawable.ic_launcher_background
                         )
 
                     }
@@ -81,12 +85,12 @@ fun ListItem(
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = image),
             contentDescription = "ListOfImage"
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = name)
+            Text(modifier = Modifier.testTag("playlistItem"), text = name)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = category)
         }

@@ -4,5 +4,5 @@ data class PlaylistModel(
     val id: Int,
     val name: String,
     val category: String,
-    val image: Int
+    val image: Int?
 )
