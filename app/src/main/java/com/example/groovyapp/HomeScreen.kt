@@ -21,32 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.groovyapp.playlist.PlaylistApi
-import com.example.groovyapp.playlist.PlaylistModel
-import com.example.groovyapp.playlist.PlaylistRepository
-import com.example.groovyapp.playlist.PlaylistService
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.groovyapp.playlist.PlaylistViewModel
-import com.example.groovyapp.playlist.PlaylistViewModelFactory
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
-fun HomeScreen() {
-    val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.1.105:2999/")
-        .client(OkHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+fun HomeScreen(
+    homeViewModel: PlaylistViewModel = hiltViewModel()
+) {
+    val playlist = homeViewModel.playlists.collectAsState().value
 
-    val api = retrofit.create(PlaylistApi::class.java)
-    val service = PlaylistService(api)
-    val repository = PlaylistRepository(service)
-    val viewModel: PlaylistViewModel = viewModel(factory = PlaylistViewModelFactory(repository))
-
-
-    val playlist = viewModel.playlists.collectAsState().value
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(title = { Text("Playlists") }, backgroundColor = MaterialTheme.colors.primary)
     }, content = {
@@ -86,13 +69,14 @@ fun ListItem(
     ) {
         Image(
             painter = painterResource(id = image),
-            contentDescription = "ListOfImage"
+            contentDescription = "listOfImage$id",
+            //modifier = Modifier.testTag("listOfImage")
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(modifier = Modifier.testTag("playlistItem"), text = name)
+            Text(modifier = Modifier.testTag("playlistItem$id"), text = name)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = category)
+            Text(modifier = Modifier.testTag("playlistSubItem$id"), text = category)
         }
     }
 }
