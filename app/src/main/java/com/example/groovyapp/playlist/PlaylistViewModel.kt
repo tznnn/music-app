@@ -17,13 +17,18 @@ class PlaylistViewModel @Inject constructor(
         MutableStateFlow(null)
     val playlists: StateFlow<Result<List<PlaylistModel>>?> = _playlists
 
+    private val _loader: MutableStateFlow<Boolean> =
+        MutableStateFlow(true)
+    var loader: StateFlow<Boolean> = _loader
 
     init {
         viewModelScope.launch {
             repository.getPlaylist().collect {
+                _loader.value = false
                 _playlists.value = it
             }
         }
+
     }
 
 }

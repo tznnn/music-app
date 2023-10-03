@@ -49,15 +49,6 @@ class PlaylistFeature {
     @Test
     fun displayListOfPlaylists() {
 
-        /*composeTestRule.waitUntil {
-            composeTestRule.onAllNodesWithText("asd").fetchSemanticsNodes().isNotEmpty()
-            composeTestRule.onAllNodesWithTag("playlistLazyColumn").fetchSemanticsNodes()
-                .isNotEmpty()
-
-        }
-
-         */
-
         Thread.sleep(3000)
         composeTestRule.onNodeWithTag("playlistLazyColumn").onChildren().assertCountEquals(15)
         composeTestRule.onNodeWithTag("playlistItem1").assertTextContains("Hard Rock Cafe")
@@ -65,5 +56,11 @@ class PlaylistFeature {
         composeTestRule.onAllNodesWithContentDescription("listOfImage1")
             .onFirst()
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun hidesLoader() {
+        Thread.sleep(4000)
+        composeTestRule.onNodeWithTag("loader").assertDoesNotExist()
     }
 }
